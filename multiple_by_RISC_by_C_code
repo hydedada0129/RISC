@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+int main() {
+    int operand1 = 5;
+    int operand2 = 3;
+    int result;
+
+    // Perform multiplication (5 * 3) using bit shifting
+    asm (
+        "movl %[op1], %%eax;"     // Move operand1 (5) into eax register
+        "movl %[op2], %%ecx;"     // Move operand2 (3) into ecx register
+        "imull %%ecx, %%eax;"     // Multiply eax by ecx, store result in eax
+        "movl %%eax, %[res];"     // Move result from eax to result variable
+        : [res] "=r" (result)     // Output operand (result)
+        : [op1] "r" (operand1), [op2] "r" (operand2)   // Input operands (operand1 and operand2)
+        : "%eax", "%ecx"          // Clobbered registers (eax and ecx)
+    );
+
+    printf("Result: %d\n", result);  // Output the result
+
+    return 0;
+}
